@@ -52,6 +52,30 @@ func (m *Map[K, V]) Len() int {
 	return len(*m)
 }
 
+func (m *Map[K, V]) Merge(other Map[K, V]) {
+	for key, value := range other {
+		(*m)[key] = value
+	}
+}
+
+func (m *Map[K, V]) Copy() Map[K, V] {
+	result := make(Map[K, V])
+	for key, value := range *m {
+		result[key] = value
+	}
+	return result
+}
+
+func (m *Map[K, V]) Filter(predicate func(K, V) bool) Map[K, V] {
+	result := make(Map[K, V])
+	for key, value := range *m {
+		if predicate(key, value) {
+			result[key] = value
+		}
+	}
+	return result
+}
+
 func Dict(obj interface{}) map[string]interface{} {
 	result := make(map[string]interface{})
 
